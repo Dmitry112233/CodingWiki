@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
+using CodingWiki_Model.Models;
 using Microsoft.AspNetCore.Mvc;
-using CodingWiki_Web.Models;
 
 namespace CodingWiki_Web.Controllers;
 
