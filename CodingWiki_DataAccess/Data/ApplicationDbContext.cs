@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Author> Authors { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
+    public DbSet<BookDetail> BookDetails { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -21,14 +22,25 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Book>().Property(u => u.Price).HasPrecision(10, 5);
 
+        modelBuilder.Entity<BookAuthorMap>().HasKey(u => new { u.AuthorId, u.BookId });
+
         var books = new List<Book>()
         {
-            new () { BookId = 1, Title = "Spider", ISBN = "123B12", Price = 7.99m },
-            new () { BookId = 2, Title = "Bug", ISBN = "123B12", Price = 6.11m },
-            new () { BookId = 3, Title = "Pussy", ISBN = "123B12", Price = 11.72m },
-            new () { BookId = 4, Title = "Dota2 for claw-shaped", ISBN = "123B12", Price = 100 }
+            new () { BookId = 1, Title = "Spider", ISBN = "123B12", Price = 7.99m, PublisherId = 1},
+            new () { BookId = 2, Title = "Bug", ISBN = "123B12", Price = 6.11m, PublisherId = 2},
+            new () { BookId = 3, Title = "Pussy", ISBN = "123B12", Price = 11.72m, PublisherId = 3 },
+            new () { BookId = 4, Title = "Dota2 for claw-shaped", ISBN = "123B12", Price = 100, PublisherId = 1 }
         };
 
         modelBuilder.Entity<Book>().HasData(books);
+        
+        var publishers = new List<Publisher>()
+        {
+            new () { PublisherId = 1, Name = "Sipaniny Production", Location = "London"},
+            new () { PublisherId = 2, Name = "Vella Go", Location = "Rim"},
+            new () { PublisherId = 3, Name = "Sisi", Location = "Moscow"}
+        };
+        
+        modelBuilder.Entity<Publisher>().HasData(publishers);
     }
 }

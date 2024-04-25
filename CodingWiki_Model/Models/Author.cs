@@ -21,4 +21,6 @@ public class Author
     
     [NotMapped]
     public string FullName { get { return $"{FirstName} {LastName}"; } }
+    
+    public List<BookAuthorMap> BookAuthor { get; set; }
 }

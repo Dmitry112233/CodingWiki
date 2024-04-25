@@ -4,6 +4,7 @@ using CodingWiki_DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodingWiki_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240425035348_OneToOneRelationBetweenBookAndBookDetail")]
+    partial class OneToOneRelationBetweenBookAndBookDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,15 +70,10 @@ namespace CodingWiki_DataAccess.Migrations
                         .HasPrecision(10, 5)
                         .HasColumnType("decimal(10,5)");
 
-                    b.Property<int>("PublisherId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BookId");
-
-                    b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
 
@@ -85,7 +83,6 @@ namespace CodingWiki_DataAccess.Migrations
                             BookId = 1,
                             ISBN = "123B12",
                             Price = 7.99m,
-                            PublisherId = 1,
                             Title = "Spider"
                         },
                         new
@@ -93,7 +90,6 @@ namespace CodingWiki_DataAccess.Migrations
                             BookId = 2,
                             ISBN = "123B12",
                             Price = 6.11m,
-                            PublisherId = 2,
                             Title = "Bug"
                         },
                         new
@@ -101,7 +97,6 @@ namespace CodingWiki_DataAccess.Migrations
                             BookId = 3,
                             ISBN = "123B12",
                             Price = 11.72m,
-                            PublisherId = 3,
                             Title = "Pussy"
                         },
                         new
@@ -109,24 +104,8 @@ namespace CodingWiki_DataAccess.Migrations
                             BookId = 4,
                             ISBN = "123B12",
                             Price = 100m,
-                            PublisherId = 1,
                             Title = "Dota2 for claw-shaped"
                         });
-                });
-
-            modelBuilder.Entity("CodingWiki_Model.Models.BookAuthorMap", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuthorId", "BookId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("BookAuthorMap");
                 });
 
             modelBuilder.Entity("CodingWiki_Model.Models.BookDetail", b =>
@@ -193,26 +172,6 @@ namespace CodingWiki_DataAccess.Migrations
                     b.HasKey("PublisherId");
 
                     b.ToTable("Publishers");
-
-                    b.HasData(
-                        new
-                        {
-                            PublisherId = 1,
-                            Location = "London",
-                            Name = "Sipaniny Production"
-                        },
-                        new
-                        {
-                            PublisherId = 2,
-                            Location = "Rim",
-                            Name = "Vella Go"
-                        },
-                        new
-                        {
-                            PublisherId = 3,
-                            Location = "Moscow",
-                            Name = "Sisi"
-                        });
                 });
 
             modelBuilder.Entity("CodingWiki_Model.Models.SubCategory", b =>
@@ -233,36 +192,6 @@ namespace CodingWiki_DataAccess.Migrations
                     b.ToTable("SubCategories");
                 });
 
-            modelBuilder.Entity("CodingWiki_Model.Models.Book", b =>
-                {
-                    b.HasOne("CodingWiki_Model.Models.Publisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Publisher");
-                });
-
-            modelBuilder.Entity("CodingWiki_Model.Models.BookAuthorMap", b =>
-                {
-                    b.HasOne("CodingWiki_Model.Models.Author", "Author")
-                        .WithMany("BookAuthor")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CodingWiki_Model.Models.Book", "Book")
-                        .WithMany("BookAuthor")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Book");
-                });
-
             modelBuilder.Entity("CodingWiki_Model.Models.BookDetail", b =>
                 {
                     b.HasOne("CodingWiki_Model.Models.Book", "Book")
@@ -274,21 +203,9 @@ namespace CodingWiki_DataAccess.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("CodingWiki_Model.Models.Author", b =>
-                {
-                    b.Navigation("BookAuthor");
-                });
-
             modelBuilder.Entity("CodingWiki_Model.Models.Book", b =>
                 {
-                    b.Navigation("BookAuthor");
-
                     b.Navigation("BookDetail");
-                });
-
-            modelBuilder.Entity("CodingWiki_Model.Models.Publisher", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

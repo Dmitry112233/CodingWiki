@@ -18,4 +18,13 @@ public class Book
     
     [NotMapped]
     public int PriceRange { get; set; }
+    
+    public BookDetail BookDetail { get; set; }
+    
+    [ForeignKey("Publisher")]
+    public int PublisherId { get; set; }
+    
+    public Publisher Publisher { get; set; }
+    
+    public List<BookAuthorMap> BookAuthor { get; set; }
 }
