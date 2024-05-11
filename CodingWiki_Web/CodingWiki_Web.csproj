@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CodingWiki_DataAccess\CodingWiki_DataAccess.csproj" />
       <ProjectReference Include="..\CodingWiki_Model\CodingWiki_Model.csproj" />
     </ItemGroup>
 
@@ -14,6 +15,7 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.18" />
     </ItemGroup>
 
 </Project>

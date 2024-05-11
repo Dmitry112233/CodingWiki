@@ -11,7 +11,7 @@ public class BookAuthorMap
     [ForeignKey("Author")]
     public int AuthorId { get; set; }
     
-    public Book Book { get; set; }
+    public  Book Book { get; set; }
     
     public Author Author { get; set; }
 }

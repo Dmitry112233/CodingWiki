@@ -1,5 +1,6 @@
 using CodingWiki_Model.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CodingWiki_DataAccess.Data;
 
@@ -11,17 +12,24 @@ public class ApplicationDbContext : DbContext
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
     public DbSet<BookDetail> BookDetails { get; set; }
+    
+    public DbSet<BookAuthorMap> BookAuthorMaps { get; set; }
 
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Server=127.0.0.1, 1431;Database=sql-coding-wiki;TrustServerCertificate=True;Trusted_Connection=false;MultipleActiveResultSets=true;User Id=SA;Password=MyPass@word");
+        /*optionsBuilder.UseSqlServer("Server=127.0.0.1, 1431;Database=sql-coding-wiki;TrustServerCertificate=True;Trusted_Connection=false;MultipleActiveResultSets=true;User Id=SA;Password=MyPass@word")
+            .LogTo(Console.WriteLine, new [] {DbLoggerCategory.Database.Command.Name}, LogLevel.Information);*/
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
         modelBuilder.Entity<Book>().Property(u => u.Price).HasPrecision(10, 5);
-
         modelBuilder.Entity<BookAuthorMap>().HasKey(u => new { u.AuthorId, u.BookId });
 
         var books = new List<Book>()
@@ -42,5 +50,14 @@ public class ApplicationDbContext : DbContext
         };
         
         modelBuilder.Entity<Publisher>().HasData(publishers);
+        
+        var categories = new List<Category>()
+        {
+            new () { CategoryId = 1, CategoryName = "Cat 1"},
+            new () { CategoryId = 2, CategoryName = "Cat 2"},
+            new () { CategoryId = 3, CategoryName = "Cat 3"}
+        };
+        
+        modelBuilder.Entity<Category>().HasData(categories);
     }
 }
